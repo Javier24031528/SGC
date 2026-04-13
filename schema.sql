@@ -22,6 +22,16 @@ CREATE TABLE IF NOT EXISTS calificaciones (
     FOREIGN KEY (materia_id) REFERENCES materias(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS asistencias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    alumno_id INT,
+    materia_id INT,
+    fecha DATE,
+    presente BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (alumno_id) REFERENCES alumnos(id) ON DELETE CASCADE,
+    FOREIGN KEY (materia_id) REFERENCES materias(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -32,3 +42,15 @@ CREATE TABLE IF NOT EXISTS usuarios (
 -- Insertar usuario admin por defecto (pass: admin123 -> SHA1)
 -- SHA1('admin123') = 7c4a8d09ca3762af61e59520943dc26494f8941b
 INSERT INTO usuarios (username, password, rol) VALUES ('admin', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'ADMIN') ON DUPLICATE KEY UPDATE id=id;
+
+-- Datos de ejemplo
+INSERT INTO alumnos (nombre, email) VALUES 
+('Juan Perez', 'juan.perez@example.com'),
+('Maria Garcia', 'maria.garcia@example.com')
+ON DUPLICATE KEY UPDATE id=id;
+
+INSERT INTO materias (nombre) VALUES 
+('Matematicas'),
+('Historia'),
+('Ciencias')
+ON DUPLICATE KEY UPDATE id=id;
