@@ -40,8 +40,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
 );
 
 -- Insertar usuario admin por defecto (pass: admin123 -> SHA1)
--- SHA1('admin123') = 7c4a8d09ca3762af61e59520943dc26494f8941b
-INSERT INTO usuarios (username, password, rol) VALUES ('admin', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'ADMIN') ON DUPLICATE KEY UPDATE id=id;
+-- SHA1('admin123') = f865b53623b121fd34ee5426c792e5c33af8c227
+INSERT INTO usuarios (username, password, rol) VALUES ('admin', 'f865b53623b121fd34ee5426c792e5c33af8c227', 'ADMIN') ON DUPLICATE KEY UPDATE id=id;
 
 -- Datos de ejemplo
 INSERT INTO alumnos (nombre, email) VALUES 
