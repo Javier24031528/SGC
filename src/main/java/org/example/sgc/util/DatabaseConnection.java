@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DatabaseConnection {
     private static final String URL = "jdbc:mysql://localhost:3306/sgc_db";
     private static final String USER = "root";
-    private static final String PASSWORD = "DobleAtakez1."; // Cambiar según configuración local
+    private static final String PASSWORD = ""; // Cambiado a vacío por ser el estándar en XAMPP. Si tiene otra, cámbiela aquí.
 
     private static Connection connection = null;
 

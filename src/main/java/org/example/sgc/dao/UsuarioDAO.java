@@ -71,6 +71,11 @@ public class UsuarioDAO implements GenericDAO<Usuario> {
 
     public Usuario login(String username, String password) throws SQLException {
         String encryptedPass = EncryptionUtil.sha1(password);
+        System.out.println("[DEBUG_LOG] Intento de login: " + username + " | Pass Hash: " + encryptedPass);
+        
+        // Verificar si la tabla de usuarios está vacía e insertar el admin por si acaso
+        ensureAdminUser();
+
         String sql = "SELECT * FROM usuarios WHERE username = ? AND password = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -88,5 +93,24 @@ public class UsuarioDAO implements GenericDAO<Usuario> {
             }
         }
         return null;
+    }
+
+    private void ensureAdminUser() {
+        String checkSql = "SELECT COUNT(*) FROM usuarios";
+        String insertSql = "INSERT INTO usuarios (username, password, rol) VALUES ('admin', ?, 'ADMIN')";
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(checkSql)) {
+            
+            if (rs.next() && rs.getInt(1) == 0) {
+                System.out.println("[DEBUG_LOG] No se encontraron usuarios. Creando usuario admin por defecto...");
+                try (PreparedStatement pstmt = conn.prepareStatement(insertSql)) {
+                    pstmt.setString(1, EncryptionUtil.sha1("admin123"));
+                    pstmt.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("[DEBUG_LOG] Error al asegurar usuario admin: " + e.getMessage());
+        }
     }
 }

@@ -34,13 +34,18 @@ public class LoginController {
         try {
             Usuario user = usuarioDAO.login(username, password);
             if (user != null) {
+                System.out.println("[DEBUG_LOG] Login exitoso para usuario: " + username);
                 loadMainApp();
             } else {
+                System.out.println("[DEBUG_LOG] Fallo de login: Credenciales incorrectas para: " + username);
                 showAlert("Error", "Usuario o contraseña incorrectos.");
             }
         } catch (SQLException e) {
-            showAlert("Error de Base de Datos", "No se pudo conectar: " + e.getMessage());
+            System.err.println("[DEBUG_LOG] Error de base de datos durante login: " + e.getMessage());
+            e.printStackTrace();
+            showAlert("Error de Base de Datos", "No se pudo conectar a la base de datos. Verifique que MySQL esté activo y las credenciales en DatabaseConnection.java sean correctas.");
         } catch (IOException e) {
+            System.err.println("[DEBUG_LOG] Error de E/S al cargar la vista: " + e.getMessage());
             showAlert("Error de Aplicación", "No se pudo cargar la vista principal.");
         }
     }
