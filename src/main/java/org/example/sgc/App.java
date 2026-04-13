@@ -10,10 +10,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/sgc/view/main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/sgc/view/login.fxml"));
         Parent root = loader.load();
-        primaryStage.setTitle("Sistema de Gestión de Calificaciones");
-        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setTitle("SGC - Login");
+        primaryStage.setScene(new Scene(root, 400, 300));
         primaryStage.show();
     }
 
