@@ -7,8 +7,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CalificacionDAO {
+public class CalificacionDAO implements GenericDAO<Calificacion> {
 
+    @Override
     public void insert(Calificacion calif) throws SQLException {
         String sql = "INSERT INTO calificaciones (alumno_id, materia_id, nota, periodo) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -25,6 +26,11 @@ public class CalificacionDAO {
                 }
             }
         }
+    }
+
+    @Override
+    public List<Calificacion> findAll() throws SQLException {
+        return findAllWithDetails();
     }
 
     public List<Calificacion> findAllWithDetails() throws SQLException {
@@ -52,6 +58,7 @@ public class CalificacionDAO {
         return list;
     }
 
+    @Override
     public void update(Calificacion calif) throws SQLException {
         String sql = "UPDATE calificaciones SET nota = ?, periodo = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -63,6 +70,7 @@ public class CalificacionDAO {
         }
     }
 
+    @Override
     public void delete(int id) throws SQLException {
         String sql = "DELETE FROM calificaciones WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();

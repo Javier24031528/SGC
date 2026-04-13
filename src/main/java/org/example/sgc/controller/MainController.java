@@ -17,6 +17,10 @@ import org.example.sgc.dao.MateriaDAO;
 import org.example.sgc.model.Alumno;
 import org.example.sgc.model.Calificacion;
 import org.example.sgc.model.Materia;
+import org.example.sgc.strategy.AverageStrategy;
+import org.example.sgc.strategy.SimpleAverageStrategy;
+import org.example.sgc.util.Observer;
+import org.example.sgc.util.Subject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,7 +28,7 @@ import java.io.FileWriter;
 import java.sql.SQLException;
 import java.util.List;
 
-public class MainController {
+public class MainController extends Subject implements Observer {
 
     @FXML private TextField txtNombreAlumno;
     @FXML private TextField txtEmailAlumno;
@@ -57,8 +61,11 @@ public class MainController {
     private ObservableList<Materia> materiasList = FXCollections.observableArrayList();
     private ObservableList<Calificacion> calificacionesList = FXCollections.observableArrayList();
 
+    private AverageStrategy averageStrategy = new SimpleAverageStrategy();
+
     @FXML
     public void initialize() {
+        this.addObserver(this); // Registrarse como observador
         // Configurar columnas Alumnos
         colIdAlumno.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNombreAlumno.setCellValueFactory(new PropertyValueFactory<>("nombre"));
@@ -149,7 +156,7 @@ public class MainController {
             double nota = Double.parseDouble(notaStr);
             Calificacion c = new Calificacion(0, a.getId(), m.getId(), nota, periodo);
             calificacionDAO.insert(c);
-            loadData(); // Recargar para obtener nombres
+            notifyObservers(); // Notificar cambio
             txtNota.clear();
             txtPeriodo.clear();
         } catch (NumberFormatException e) {
@@ -227,6 +234,11 @@ public class MainController {
         }
     }
     @FXML private void handleExit() { System.exit(0); }
+
+    @Override
+    public void update() {
+        loadData();
+    }
 
     private void showAlert(String msg) {
         System.out.println("[DEBUG_LOG] " + msg);
