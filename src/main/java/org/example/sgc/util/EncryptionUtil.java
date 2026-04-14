@@ -7,7 +7,7 @@ public class EncryptionUtil {
         if (input == null) return null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
-            byte[] messageDigest = md.digest(input.getBytes());
+            byte[] messageDigest = md.digest(input.getBytes(java.nio.charset.StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
             for (byte b : messageDigest) {
                 sb.append(String.format("%02x", b));
